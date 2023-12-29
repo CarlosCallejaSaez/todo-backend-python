@@ -69,3 +69,17 @@ async def delete_todo(title):
     if response:
       return "Todo deleted successfully"
     raise HTTPException(404, f"No todo found with title: {title}")
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"message": exc.detail},
+    )
+
+@app.exception_handler(404)
+async def not_found_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": "Resource not found"},
+    )
