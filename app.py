@@ -1,6 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from model import Todo
+from starlette.requests import Request
+from starlette.responses import HTMLResponse
 
 
 
@@ -70,16 +72,30 @@ async def delete_todo(title):
       return "Todo deleted successfully"
     raise HTTPException(404, f"No todo found with title: {title}")
 
-@app.exception_handler(HTTPException)
-async def http_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=exc.status_code,
-        content={"message": exc.detail},
+
+
+def not_found_error(request: Request, exc: HTTPException):
+    return HTMLResponse(
+        status_code=404,
+        content=f"""
+        <html>
+
+        <head>
+            <title>404 Not Found</title>
+        </head>
+
+        <body style="padding: 30px">
+            <h1>404 Not Found</h1>
+            <p>The resource was not found.</p>
+            <p>Carlos Calleja Saez.</p>
+        </body>
+
+        </html>
+        """,
     )
 
+
+
 @app.exception_handler(404)
-async def not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": "Resource not found"},
-    )
+def not_found_exception_handler(request: Request, exc: HTTPException):
+    return not_found_error(request, exc)

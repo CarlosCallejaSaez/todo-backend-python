@@ -15,6 +15,6 @@ This is a project of a To Do application developed with FastAPI and MongoDB.
 | POST   | `/api/todo`           | Create a new todo            |
 | PUT    | `/api/todo/{title}`   | Update a todo by title       |
 | DELETE | `/api/todo/{title}`   | Delete a todo by title       |
-| ANY    | `/{path:path}`        | Custom 404 Handling          |
+| ANY    | `/WRONG-PATH`         | Custom 404 HTML              |
 
 
